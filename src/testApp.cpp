@@ -3,6 +3,7 @@
 #include <pcl/surface/simplification_remove_unused_vertices.h>
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/features/fpfh_omp.h>
+#include "segmentation.h"
 
 using namespace ofxPCL;
 
@@ -26,10 +27,10 @@ void testApp::createMeshes(){
 		}else{
 			smoothed = clouds[i];
 		}*/
-		pcl::PolygonMesh::Ptr triangles = getMesh(clouds[i]);
+		//pcl::PolygonMesh::Ptr triangles = getMesh(clouds[i]);
 
-		toOf(clouds[i],meshes[i],factorX,factorY,factorZ);
-		addIndices(meshes[i],triangles);
+		//toOf(clouds[i],meshes[i],factorX,factorY,factorZ);
+		//addIndices(meshes[i],triangles);
 		//toOf(smoothed,normals,smoothedMesh,640,480,-640);
 
 		ofLogNotice() << "created mesh" << i;
@@ -95,14 +96,14 @@ void testApp::detectKeyPoints(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr input,
 
 
 void testApp::extractDescriptors(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr input, pcl::PointCloud<pcl::PointXYZI>::Ptr keypoints, pcl::PointCloud<pcl::FPFHSignature33>::Ptr features){
-	typename pcl::PointCloud<pcl::PointXYZRGB>::Ptr kpts(new pcl::PointCloud<pcl::PointXYZRGB>);
+	pcl::PointCloud<pcl::PointXYZRGB>::Ptr kpts(new pcl::PointCloud<pcl::PointXYZRGB>);
 
 	pcl::copyPointCloud(*keypoints, *kpts);
 
-	typename pcl::FeatureFromNormals<pcl::PointXYZRGB, pcl::Normal, pcl::FPFHSignature33>::Ptr feature_from_normals = boost::dynamic_pointer_cast<pcl::FeatureFromNormals<pcl::PointXYZRGB, pcl::Normal, pcl::FPFHSignature33> > (feature_extractor);
+	pcl::FeatureFromNormals<pcl::PointXYZRGB, pcl::Normal, pcl::FPFHSignature33>::Ptr feature_from_normals = boost::dynamic_pointer_cast<pcl::FeatureFromNormals<pcl::PointXYZRGB, pcl::Normal, pcl::FPFHSignature33> > (feature_extractor);
 
 	if (feature_from_normals){
-		typename pcl::PointCloud<pcl::Normal>::Ptr normals (new  pcl::PointCloud<pcl::Normal>);
+		pcl::PointCloud<pcl::Normal>::Ptr normals (new  pcl::PointCloud<pcl::Normal>);
 		pcl::NormalEstimation<pcl::PointXYZRGB, pcl::Normal> normal_estimation;
 		normal_estimation.setSearchMethod (pcl::search::Search<pcl::PointXYZRGB>::Ptr (new pcl::search::KdTree<pcl::PointXYZRGB>));
 		normal_estimation.setRadiusSearch (0.01);
@@ -124,7 +125,20 @@ void testApp::findCorrespondences(pcl::PointCloud<pcl::PointXYZRGB>::Ptr src, pc
 	pcl::PointCloud<pcl::PointXYZI>::Ptr keypoints;
 }
 
+void testApp::substractPlane(){
+    bSubstractPlane = true;
+	distanceThreshold = 0.1;
+	maxIters = 5;
 
+    if (bSubstractPlane){
+        for(int i= 0; i< clouds.size(); i++){
+            size_t n = clouds[i]->size ();
+            clouds[i] = findAndSubtractPlane (clouds[i], distanceThreshold, (int)maxIters);
+            cout << "Subtracted %zu points along the detected plane\n" <<  n - clouds[i]->size () << endl;
+        }
+
+    }
+}
 //--------------------------------------------------------------
 void testApp::setup(){
 	ofBackground(0,0,0);
@@ -139,7 +153,7 @@ void testApp::setup(){
 	passthrough.setFilterFieldName("z");
 
 	sift3D = new pcl::SIFTKeypoint<pcl::PointXYZRGB, pcl::PointXYZI>;
-	sift3D->setScales(0.01, 3, 2);
+	sift3D->setScales(0.01, 8, 4);
 	sift3D->setMinimumContrast(0.0);
 
 	keypoint_detector.reset(sift3D);
@@ -154,9 +168,12 @@ void testApp::setup(){
 	normals = pcl::PointCloud<pcl::Normal>::Ptr(new pcl::PointCloud<pcl::Normal>);
 
 
-	loadBYOS();
-	//loadPCDCollection("minimouse");
+	//loadBYOS();
+	loadPCDCollection("minimouse");
+	substractPlane();
 	createMeshes();
+
+
 
 	gui.setup("smooth");
 	gui.add(smoothRadius.setup("smooth",30./factorX,0,1000/factorX));
@@ -172,6 +189,8 @@ void testApp::setup(){
 
 	gui.add(currentMesh.setup("current",0,0,meshes.size()-1,true));
 	gui.add(zoomZ.setup("zoom Z",0,0,ofGetHeight()*2));
+
+
 
 }
 
@@ -213,6 +232,8 @@ void testApp::update(){
 		isNewFrame = false;
 		mutex.unlock();*/
 	}
+
+
 }
 
 //--------------------------------------------------------------
@@ -342,6 +363,9 @@ void testApp::keyPressed(int key){
 		file_mesh.close();
 	}
 	break;
+	case '1':
+        bSubstractPlane = !bSubstractPlane;
+        break;
 	}
 
 }
@@ -386,6 +410,6 @@ void testApp::gotMessage(ofMessage msg){
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+void testApp::dragEvent(ofDragInfo dragInfo){
 
 }
