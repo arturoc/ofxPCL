@@ -17,13 +17,13 @@ USER_CFLAGS = $(shell pkg-config pcl_common-1.3 pcl_surface-1.3 pcl_filters-1.3 
 # for example libraries like:
 # USER_LD_FLAGS = libs/libawesomelib.a
 
-USER_LDFLAGS = 
+USER_LDFLAGS =
 
 
 # use this to add system libraries for example:
 # USER_LIBS = -lpango
- 
-USER_LIBS = -lusb-1.0 -lpcl_surface -lpcl_registration -lpcl_sample_consensus -lpcl_features -lcminpack -lm -lpcl_kdtree -lpcl_range_image -lpcl_filters -lpcl_search -lflann_cpp -lpcl_common -lpcl_io -lOpenNI -lpcl_octree
+
+USER_LIBS = -lusb-1.0 -lpcl_surface -lpcl_registration -lpcl_sample_consensus -lpcl_features -lm -lpcl_kdtree -lpcl_range_image -lpcl_filters -lpcl_search -lflann_cpp -lpcl_common -lpcl_io -lOpenNI -lpcl_octree -lpcl_segmentation
 
 
 # change this to add different compiler optimizations to your project

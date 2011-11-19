@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<CodeBlocks_project_file>
+  <FileVersion major="1" minor="6"/>
+  <Project>
+    <Option title="ofxPCL"/>
+    <Option makefile_is_custom="1"/>
+    <Option pch_mode="2"/>
+    <Option compiler="gcc"/>
+    <Option virtualFolders="addons/;src/;"/>
+    <Build>
+      <Target title="Debug">
+        <Option output="bin/$(PROJECT_NAME)_debug" prefix_auto="1" extension_auto="1"/>
+        <Option working_dir="bin"/>
+        <Option object_output="obj/Debug/"/>
+        <Option external_deps="../../../libs/openFrameworksCompiled/lib/linux/libopenFrameworksDebug.a;"/>
+        <Option type="1"/>
+        <Option compiler="gcc"/>
+        <Option projectLinkerOptionsRelation="2"/>
+      </Target>
+      <Target title="Release">
+        <Option output="bin/$(PROJECT_NAME)" prefix_auto="1" extension_auto="1"/>
+        <Option working_dir="bin"/>
+        <Option object_output="obj/Release/"/>
+        <Option external_deps="../../../libs/openFrameworksCompiled/lib/linux/libopenFrameworks.a;"/>
+        <Option type="1"/>
+        <Option compiler="gcc"/>
+        <Option projectLinkerOptionsRelation="2"/>
+      </Target>
+    </Build>
+    <Unit filename="src/main.cpp">
+      <Option virtualFolder="src/"/>
+    </Unit>
+    <Unit filename="src/testApp.cpp">
+      <Option virtualFolder="src/"/>
+    </Unit>
+    <Unit filename="src/testApp.h">
+      <Option virtualFolder="src/"/>
+    </Unit>
+    <Unit filename="config.make">
+      <Option virtualFolder="build config"/>
+    </Unit>
+    <Extensions>
+      <code_completion/>
+      <envvars/>
+      <debugger/>
+    </Extensions>
+    <Unit filename="src/ofxPCL.cpp">
+      <Option virtualFolder="src"/>
+    </Unit>
+    <Unit filename="src/ofxPCL.h">
+      <Option virtualFolder="src"/>
+    </Unit>
+    <Unit filename="src/typedefs.h">
+      <Option virtualFolder="src"/>
+    </Unit>
+    <Unit filename="src/segmentation.h">
+      <Option virtualFolder="src"/>
+    </Unit>
+    <Unit filename="src/filters.h">
+      <Option virtualFolder="src"/>
+    </Unit>
+    <Unit filename="src/gui/ofGui.h">
+      <Option virtualFolder="src/gui"/>
+    </Unit>
+    <Unit filename="src/gui/ofToggle.h">
+      <Option virtualFolder="src/gui"/>
+    </Unit>
+    <Unit filename="src/gui/ofSlider.h">
+      <Option virtualFolder="src/gui"/>
+    </Unit>
+    <Unit filename="src/gui/ofPanel.h">
+      <Option virtualFolder="src/gui"/>
+    </Unit>
+    <Unit filename="src/gui/ofBaseGui.h">
+      <Option virtualFolder="src/gui"/>
+    </Unit>
+    <Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.cpp">
+      <Option virtualFolder="addons/ofxXmlSettings/src"/>
+    </Unit>
+    <Unit filename="../../../addons/ofxXmlSettings/src/ofxXmlSettings.h">
+      <Option virtualFolder="addons/ofxXmlSettings/src"/>
+    </Unit>
+    <Unit filename="../../../addons/ofxGrabCam/src/ofxGrabCam.cpp">
+      <Option virtualFolder="addons/ofxGrabCam/src"/>
+    </Unit>
+    <Unit filename="../../../addons/ofxGrabCam/src/ofxGrabCam.h">
+      <Option virtualFolder="addons/ofxGrabCam/src"/>
+    </Unit>
+  </Project>
+</CodeBlocks_project_file>
