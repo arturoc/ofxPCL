@@ -5,6 +5,8 @@
 #include <pcl-1.3/pcl/keypoints/sift_keypoint.h>
 #include "ofxPCL.h"
 
+
+
 #include "ofMain.h"
 #include "gui/ofSlider.h"
 #include "gui/ofToggle.h"
@@ -27,7 +29,7 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+
 		void cloud_cb_ (const pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr &cloud);
 
 		void loadBYOS();
@@ -76,4 +78,10 @@ class testApp : public ofBaseApp{
 		pcl::Feature<pcl::PointXYZRGB, pcl::FPFHSignature33>::Ptr feature_extractor;
 
 		ofEasyCam camera;
+
+        //Substract planes
+		bool bSubstractPlane;
+		double distanceThreshold, maxIters;
+
+		void substractPlane();
 };
