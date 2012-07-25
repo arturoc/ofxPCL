@@ -7,7 +7,7 @@
 /* Define some custom types to make the rest of our code easier to read */
 
 // Define "PointCloud" to be a pcl::PointCloud of pcl::PointXYZRGB points
-typedef pcl::PointXYZRGB PointT;
+typedef pcl::PointXYZ PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
 typedef pcl::PointCloud<PointT>::Ptr PointCloudPtr;
 typedef pcl::PointCloud<PointT>::ConstPtr PointCloudConstPtr;

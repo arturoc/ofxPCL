@@ -23,11 +23,12 @@
  * Return: A pointer to the ModelCoefficients (i.e., the 4 coefficients of the plane, 
  *         represented in c0*x + c1*y + c2*z + c3 = 0 form)
  */
-pcl::ModelCoefficients::Ptr
-fitPlane (const PointCloudPtr & input, float distance_threshold, float max_iterations)
+template<typename PointType,typename PCPtr>
+pcl::ModelCoefficients
+fitPlane (const PCPtr & input, float distance_threshold, float max_iterations)
 {
   // Intialize the SACSegmentation object
-  pcl::SACSegmentation<PointT> seg;
+  pcl::SACSegmentation<PointType> seg;
   seg.setOptimizeCoefficients (true);
   seg.setModelType (pcl::SACMODEL_PLANE);
   seg.setMethodType (pcl::SAC_RANSAC);
@@ -35,9 +36,9 @@ fitPlane (const PointCloudPtr & input, float distance_threshold, float max_itera
   seg.setMaxIterations (max_iterations);
 
   seg.setInputCloud (input);
-  pcl::ModelCoefficients::Ptr coefficients (new pcl::ModelCoefficients ());
+  pcl::ModelCoefficients coefficients;
   pcl::PointIndices::Ptr inliers (new pcl::PointIndices ());
-  seg.segment (*inliers, *coefficients);  
+  seg.segment (*inliers, coefficients);
 
   return (coefficients);
 }
@@ -53,12 +54,13 @@ fitPlane (const PointCloudPtr & input, float distance_threshold, float max_itera
  *     from the hypothesized plane are scored as inliers.
  * Return: A pointer to a new point cloud which contains only the non-plane points
  */
-PointCloudPtr
-findAndSubtractPlane (const PointCloudPtr & input, float distance_threshold, float max_iterations)
+template<typename PointType,typename PCPtr>
+PCPtr
+findAndSubtractPlane (const PCPtr & input, float distance_threshold, float max_iterations)
 {
   // Find the dominant plane
-  pcl::SACSegmentation<PointT> seg;
-  seg.setOptimizeCoefficients (false);
+  pcl::SACSegmentation<PointType> seg;
+  seg.setOptimizeCoefficients (true);
   seg.setModelType (pcl::SACMODEL_PLANE);
   seg.setMethodType (pcl::SAC_RANSAC);
   seg.setDistanceThreshold (distance_threshold);
@@ -69,11 +71,11 @@ findAndSubtractPlane (const PointCloudPtr & input, float distance_threshold, flo
   seg.segment (*inliers, *coefficients);  
 
   // Extract the inliers
-  pcl::ExtractIndices<PointT> extract;
+  pcl::ExtractIndices<PointType> extract;
   extract.setInputCloud (input);
   extract.setIndices (inliers);
   extract.setNegative (true);
-  PointCloudPtr output (new PointCloud);
+  PCPtr output (new pcl::PointCloud<PointType>);
   extract.filter (*output);
 
   return (output);
@@ -89,7 +91,7 @@ findAndSubtractPlane (const PointCloudPtr & input, float distance_threshold, flo
  *     The minimum and maximum allowable cluster sizes
  * Return (by reference): a vector of PointIndices containing the points indices in each cluster
  */
-void
+/*void
 clusterObjects (const PointCloudPtr & input, 
                 float cluster_tolerance, int min_cluster_size, int max_cluster_size,
                 std::vector<pcl::PointIndices> & cluster_indices_out)
@@ -101,6 +103,6 @@ clusterObjects (const PointCloudPtr & input,
 
   ec.setInputCloud (input);
   ec.extract (cluster_indices_out);
-}
+}*/
 
 #endif
